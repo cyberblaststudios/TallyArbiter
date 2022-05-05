@@ -24,13 +24,16 @@ Preferences preferences;
 char tallyarbiter_host[40] = "TALLYARBITERSERVERIP";
 char tallyarbiter_port[6] = "4455";
 
-//Uncomment these lines if you want the client to use a static IP address. Default is DHCP.
+//Set staticIP to 1 if you want the client to use a static IP address. Default is DHCP.
 //Note that addresses entered here will need to be confirmed when WiFi Manager runs on client.
 //
 //local static IP config:
-//IPAddress stationIP = IPAddress(192, 168, 1, 195);
-//IPAddress stationGW = IPAddress(192, 168, 1, 1);
-//IPAddress stationMask = IPAddress(255, 255, 255, 0);
+#define staticIP 1
+#if staticIP == 1
+IPAddress stationIP = IPAddress(192, 168, 1, 195);
+IPAddress stationGW = IPAddress(192, 168, 1, 1);
+IPAddress stationMask = IPAddress(255, 255, 255, 0);
+#endif
 
 //Local Default Camera Number. Used for local display only - does not impact function. Zero results in a single dot displayed.
 int camNumber = 0;
@@ -609,10 +612,12 @@ void processTallyData() {
 
 void connectToNetwork() {
   // allow for static IP assignment instead of DHCP if stationIP is defined as something other than 0.0.0.0
+  #if staticIP == 1
   if (stationIP != IPAddress(0, 0, 0, 0))
   {
     wm.setSTAStaticIPConfig(stationIP, stationGW, stationMask); // optional DNS 4th argument 
   }
+  #endif
   
   WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
 
@@ -663,9 +668,7 @@ void connectToNetwork() {
     
     //TODO: fix MDNS discovery
     /*
-
     int nrOfServices = MDNS.queryService("tally-arbiter", "tcp");
-
     if (nrOfServices == 0) {
       logger("No server found.", "error");
     } else {
@@ -846,6 +849,11 @@ void loop(){
     logger("---------------------------------", "info-quiet");
     logger("", "info-quiet");
   }
+    
+  if (M5.Btn.pressedFor(5000)){
+    wm.resetSettings();
+    ESP.restart();
+  }
 
   // handle reconnecting if disconnected
   if (isReconnecting)
@@ -863,4 +871,3 @@ void loop(){
   delay(50);
   M5.update();
 }
-// --------------------------------------------------------------------------------------------------------------------
