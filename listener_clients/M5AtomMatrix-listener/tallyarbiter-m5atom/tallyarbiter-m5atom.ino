@@ -21,7 +21,7 @@ Preferences preferences;
 */
 
 //Tally Arbiter Server
-char tallyarbiter_host[40] = "TALLYARBITERSERVERIP";
+char tallyarbiter_host[40] = "10.10.12.239";
 char tallyarbiter_port[6] = "4455";
 
 //Set staticIP to 1 if you want the client to use a static IP address. Default is DHCP.
@@ -30,16 +30,16 @@ char tallyarbiter_port[6] = "4455";
 //local static IP config:
 #define staticIP 1
 #if staticIP == 1
-IPAddress stationIP = IPAddress(192, 168, 1, 195);
-IPAddress stationGW = IPAddress(192, 168, 1, 1);
+IPAddress stationIP = IPAddress(10, 10, 12, 238);
+IPAddress stationGW = IPAddress(10, 10, 12, 1);
 IPAddress stationMask = IPAddress(255, 255, 255, 0);
 #endif
 
 //Local Default Camera Number. Used for local display only - does not impact function. Zero results in a single dot displayed.
-int camNumber = 0;
+int camNumber = 4;
 
 // Name of the device - the serial number of the listener hardware will be appended to create a unique identifier for the server.
-String listenerDeviceName = "m5Atom-1";
+String listenerDeviceName = "m5Atom-4";
 
 // Enables the GPIO pinout
 #define TALLY_EXTRA_OUTPUT false
